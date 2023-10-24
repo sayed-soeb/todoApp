@@ -22,15 +22,15 @@ function AddTodo({ onAddTodo }) {
   }
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Enter a new todo"
-        value={todoText}
-        onChange={(e) => setTodoText(e.target.value)}
-      />
-      <button onClick={handleAddTodo}>Add Todo</button>
-    </div>
+    <div className="container">
+  <input
+    type="text"
+    placeholder="Enter a new todo"
+    value={todoText}
+    onChange={(e) => setTodoText(e.target.value)}
+  />
+  <button onClick={handleAddTodo}>Add Todo</button>
+</div>
   );
 }
 

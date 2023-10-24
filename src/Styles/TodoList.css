@@ -1,57 +1,95 @@
-/* TodoList.css */
-
-/* Base styles for larger screens */
+/* TodoList.css (or your external CSS file) */
 .todo-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f7f7f7; /* Background color for the container */
-    min-height: 100vh; /* Make the container at least 100% of the viewport height */
-    width: 40vw; /* Set the container width to 40% of the viewport width */
+  width: 40vw; /* Set the width to 40% of viewport width */
+  max-width: 60vw; /* Add a maximum width to ensure it's not too wide on larger screens */
+  max-height: 60vh;
+  margin: 0 auto;
+  justify-content: space-between;
+  display: flex;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  /* overflow: hidden; Ensure content doesn't overflow on small screens */
+}
+
+.pie-chart-container {
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+canvas {
+  width: 100%; /* Make the canvas responsive */
+  max-width: 250px; /* Set a maximum width of 300px for the pie chart */
+  height: auto; /* Maintain aspect ratio */
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #fff;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.edit-button,
+delete-button {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.edit-button:hover,
+delete-button:hover {
+  background-color: #0056b3;
+}
+
+input[type="text"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Media query for smaller displays */
+@media screen and (max-width: 500px) {
+  .todo-list {
+    display: block;
+    max-height: 80vh;
+    width: 100vw; /* Set the width to 60% of viewport width for smaller displays */
   }
-  
-  .todo-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #ccc;
-    margin: 10px;
-    padding: 10px;
-    width: 100%; /* Full width within the container */
-    background-color: #fff;
-    transition: background-color 0.2s;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Media query for smaller displays */
+@media screen and (min-width: 501px) and (max-width: 1000px) {
+  .todo-list {
+    max-width: 90vw;
+    max-height: 80vh;
+    width: 100vw; /* Set the width to 60% of viewport width for smaller displays */
   }
-  
-  /* Styles for screens smaller than 768px (e.g., mobile devices) */
-  @media (max-width: 768px) {
-    .todo-list {
-      width: 90%; /* Adjust container width for smaller screens */
-      padding: 10px; /* Adjust padding for smaller screens */
-    }
-  }
-  
-  .checkbox {
-    margin-right: 10px;
-  }
-  
-  .edit-button, .delete-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-  }
-  
-  .edit-button::before {
-    content: "✏️"; /* Edit icon */
-  }
-  
-  .delete-button::before {
-    content: "🗑️"; /* Trash icon */
-  }
-  
-  /* Hover effect for todo items */
-  .todo-item:hover {
-    background-color: #f3f3f3;
-  }
-  
+}
+
+.lists {
+  overflow-y: scroll;
+}

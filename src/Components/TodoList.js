@@ -1,27 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../Styles/TodoList.css";
+import { Chart } from "chart.js/auto"; // Import Chart.js for the pie chart
+import "../Styles/TodoList.css"; // Import your external CSS file
 
 function TodoList(todoss) {
   const [todos, setTodos] = useState([]);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [notCompletedCount, setNotCompletedCount] = useState(0);
   const [editTodo, setEditTodo] = useState({ text: "", id: "" });
+  const chartRef = useRef(null);
 
-  useEffect(() => {
-    axios.get(`http://localhost:5000/api/gettodos`)
+  const fetchTodos = () => {
+    axios
+      .get("http://localhost:5000/api/gettodos")
       .then((response) => {
         setTodos(response.data);
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to fetch todos!"); // Display an error notification
       });
+  };
+
+  const fetchPie = () => {
+    axios
+      .get("http://localhost:5000/api/gettodos")
+      .then((response) => {
+        const completed = response.data.filter((todo) => todo.completed);
+        setCompletedCount(completed.length);
+        setNotCompletedCount(response.data.length - completed.length);
+        renderPieChart(); // Call the function after fetching data
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    fetchTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editTodo,todoss]);
+
+  useEffect(() => {
+    fetchPie();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [todos]);
 
   const handleUpdateTodo = (todo) => {
     const updatedStatus = !todo.completed;
-    axios.put(`http://localhost:5000/api/togglecompleted/${todo._id}`, { completed: updatedStatus })
+    axios
+      .put(`http://localhost:5000/api/togglecompleted/${todo._id}`, {
+        completed: updatedStatus,
+      })
       .then(() => {
         setTodos((prevTodos) =>
           prevTodos.map((item) =>
@@ -37,33 +67,36 @@ function TodoList(todoss) {
   };
 
   const handleEditTodo = () => {
-    // Implement the logic to edit a todo's text
     if (editTodo.text.trim() === "") {
-      toast.warning("Todo text cannot be empty!"); // Display a warning notification
+      toast.warning("Todo text cannot be empty!");
       return;
     }
 
-    axios.put(`http://localhost:5000/api/updatetodo/${editTodo.id}`, { text: editTodo.text })
+    axios
+      .put(`http://localhost:5000/api/updatetodo/${editTodo.id}`, {
+        text: editTodo.text,
+      })
       .then(() => {
-        // Clear the editTodo state
         setEditTodo({ text: "", id: "" });
-        toast.success("Todo edited successfully!"); // Display a success notification
+        fetchTodos(); // Refetch todos after editing
+        toast.success("Todo edited successfully!");
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to edit todo!"); // Display an error notification
+        toast.error("Failed to edit todo!");
       });
   };
 
   const handleDeleteTodo = (todo) => {
-    axios.delete(`http://localhost:5000/api/deletetodo/${todo._id}`)
+    axios
+      .delete(`http://localhost:5000/api/deletetodo/${todo._id}`)
       .then(() => {
         setTodos(todos.filter((item) => item._id !== todo._id));
-        toast.success("Todo deleted successfully!"); // Display a success notification
+        toast.success("Todo deleted successfully!");
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to delete todo!"); // Display an error notification
+        toast.error("Failed to delete todo!");
       });
   };
 
@@ -75,29 +108,88 @@ function TodoList(todoss) {
     setEditTodo({ id: todo._id, text: todo.text });
   };
 
+  const renderPieChart = () => {
+    const pieChartCanvas = document.getElementById('pieChart');
+
+    // Check if the Chart exist or not
+    if (chartRef.current) {
+      chartRef.current.destroy();
+    }
+
+    // Create a new Chart instance and store it in the ref
+    chartRef.current = new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'Incomplete'],
+        datasets: [
+          {
+            data: [completedCount, notCompletedCount],
+            backgroundColor: ['blue','green'],
+          },
+        ],
+      },
+    });
+  };
+  
+
+  useEffect(() => {
+    renderPieChart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedCount, notCompletedCount]);
+
   return (
-    <div className="todo-list"> {/* Use the class name defined in the external CSS */}
+    <div className="todo-list">
+      <div className="pie-chart-container">
+        <h1>Progress</h1>
+  <canvas id="pieChart" width="200" height="200"></canvas>
+</div>
+<div className="lists">
       <ul>
         {todos.map((todo) => (
-          <li key={todo._id} className="todo-item"> {/* Use the class name for each item */}
+          <li key={todo._id} className="todo-item">
             <div>
-              <input type="checkbox" className="checkbox" onChange={() => handleUpdateTodo(todo)} />
+              <input
+                type="checkbox"
+                className="checkbox"
+                onChange={() => handleUpdateTodo(todo)}
+                checked={todo.completed}
+              />
             </div>
             {todo._id === editTodo.id ? (
               <div>
-                <input type="text" value={editTodo.text} onChange={handleEditInputChange} />
-                <button className="edit-button" onClick={handleEditTodo} />
+                <input
+                  type="text"
+                  value={editTodo.text}
+                  onChange={handleEditInputChange}
+                />
+                <button
+                  className="edit-button"
+                  onClick={handleEditTodo}
+                >
+                  Save
+                </button>
               </div>
             ) : (
               <div>
                 {todo.text}
-                <button className="edit-button" onClick={() => setEditTodoId(todo)} />
+                <button
+                  className="edit-button"
+                  onClick={() => setEditTodoId(todo)}
+                >
+                  Edit
+                </button>
               </div>
             )}
-            <button className="delete-button" onClick={() => handleDeleteTodo(todo)} />
+            <button
+              className="delete-button"
+              onClick={() => handleDeleteTodo(todo)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
+      </div>
       <ToastContainer />
     </div>
   );
