@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../Styles/TodoList.css";
 
-function TodoList() {
+function TodoList(todoss) {
   const [todos, setTodos] = useState([]);
   const [editTodo, setEditTodo] = useState({ text: "", id: "" });
 
@@ -16,23 +17,22 @@ function TodoList() {
         console.error(error);
         toast.error("Failed to fetch todos!"); // Display an error notification
       });
-  }, [editTodo]);
+  }, [editTodo,todoss]);
 
   const handleUpdateTodo = (todo) => {
-    // Implement the logic to update a todo's completion status
-    axios.put(`http://localhost:5000/api/updatetodo/${todo._id}`, { completed: !todo.completed })
+    const updatedStatus = !todo.completed;
+    axios.put(`http://localhost:5000/api/togglecompleted/${todo._id}`, { completed: updatedStatus })
       .then(() => {
-        // Update the completion status of the todo in the local state
         setTodos((prevTodos) =>
           prevTodos.map((item) =>
-            item._id === todo._id ? { ...item, completed: !item.completed } : item
+            item._id === todo._id ? { ...item, completed: updatedStatus } : item
           )
         );
-        toast.success("Todo updated successfully!"); // Display a success notification
+        toast.success("Todo completion status updated successfully!");
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to update todo!"); // Display an error notification
+        toast.error("Failed to update todo completion status!");
       });
   };
 
@@ -76,35 +76,29 @@ function TodoList() {
   };
 
   return (
-    <div>
+    <div className="todo-list"> {/* Use the class name defined in the external CSS */}
       <ul>
         {todos.map((todo) => (
-          <li key={todo._id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => handleUpdateTodo(todo)}
-            />
+          <li key={todo._id} className="todo-item"> {/* Use the class name for each item */}
+            <div>
+              <input type="checkbox" className="checkbox" onChange={() => handleUpdateTodo(todo)} />
+            </div>
             {todo._id === editTodo.id ? (
               <div>
-                <input
-                  type="text"
-                  value={editTodo.text}
-                  onChange={handleEditInputChange}
-                />
-                <button onClick={handleEditTodo}>Save</button>
+                <input type="text" value={editTodo.text} onChange={handleEditInputChange} />
+                <button className="edit-button" onClick={handleEditTodo} />
               </div>
             ) : (
               <div>
                 {todo.text}
-                <button onClick={() => setEditTodoId(todo)}>Edit</button>
+                <button className="edit-button" onClick={() => setEditTodoId(todo)} />
               </div>
             )}
-            <button onClick={() => handleDeleteTodo(todo)}>Delete</button>
+            <button className="delete-button" onClick={() => handleDeleteTodo(todo)} />
           </li>
         ))}
       </ul>
-      <ToastContainer /> {/* Add ToastContainer for notifications */}
+      <ToastContainer />
     </div>
   );
 }

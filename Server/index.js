@@ -62,6 +62,13 @@ app.delete('/api/deletetodo/:id', (req,res) => {
     .catch(err => console.log(err));
 });
 
+// Update Todo Completion Status
+app.put('/api/togglecompleted/:id', (req, res) => {
+    Todo.findByIdAndUpdate(req.params.id, { completed: req.body.completed })
+      .then(() => res.json({ message: 'Todo completion status updated successfully' }))
+      .catch(err => console.log(err));
+  });
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })

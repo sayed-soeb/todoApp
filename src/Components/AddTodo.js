@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import the CSS for styling
+import { toast } from "react-toastify";
+import "../Styles/AddTodo.css";
 
-function AddTodo() {
+function AddTodo({ onAddTodo }) {
   const [todoText, setTodoText] = useState("");
 
   const handleAddTodo = () => {
-    axios
-      .post(`http://localhost:5000/api/addtodo`, { text: todoText })
+    axios.post(`http://localhost:5000/api/addtodo`, { text: todoText })
       .then((response) => {
         console.log(response.data);
-        toast.success("Todo added successfully!"); // Display a success notification
+        toast.success("Todo added successfully");
         setTodoText(""); // Clear the input field
+        // Notify the parent component to add the new todo
+        onAddTodo(response.data);
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to add todo!"); // Display an error notification
+        toast.error("Failed to add todo");
       });
   }
 
@@ -29,7 +30,6 @@ function AddTodo() {
         onChange={(e) => setTodoText(e.target.value)}
       />
       <button onClick={handleAddTodo}>Add Todo</button>
-      <ToastContainer /> {/* Add ToastContainer for notifications */}
     </div>
   );
 }
