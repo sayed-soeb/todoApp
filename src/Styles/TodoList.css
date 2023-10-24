@@ -10,6 +10,7 @@
   background-color: #f1dddd;
   border: 1px solid #ddd;
   border-radius: 10px;
+  overflow-y: scroll;
   /* overflow: hidden; Ensure content doesn't overflow on small screens */
 }
 
