@@ -19,3 +19,26 @@ db.once('open',function(){
     console.log('Connected to Database');
 });
 
+//Models
+const Todo = require('./models/Todo');
+
+//Middleware
+app.use(bodyParser.json());
+
+//API Endpoints
+
+//Add Todo
+app.post('/api/addtodo',(req,res) => {
+    const newTodo = new Todo({
+        text: req.body.text,
+        completed: false,
+    });
+
+    newTodo.save()
+    .then(todo => res.json(todo))
+    .catch(err => console.log(err));
+})
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+})
