@@ -7,9 +7,9 @@
   justify-content: space-between;
   display: flex;
   padding: 20px;
-  background-color: #f7f7f7;
+  background-color: #f1dddd;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 10px;
   /* overflow: hidden; Ensure content doesn't overflow on small screens */
 }
 
@@ -20,6 +20,7 @@
 h1 {
   font-size: 24px;
   margin-bottom: 20px;
+  color: rgb(203, 83, 83);
 }
 
 canvas {
@@ -44,13 +45,29 @@ ul {
   background-color: #fff;
 }
 
+/* Change the checkbox color */
 .checkbox {
-  margin-right: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d6552a;
+  border-radius: 4px;
+  background-color: white;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50px;
+}
+
+/* Change the checkbox color when checked */
+.checkbox:checked {
+  background-color: #a34c3b;
 }
 
 .edit-button,
-delete-button {
-  background-color: #007BFF;
+.delete-button {
+  background-color: #84352c;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -59,9 +76,11 @@ delete-button {
   margin-left: 10px;
 }
 
-.edit-button:hover,
-delete-button:hover {
-  background-color: #0056b3;
+.edit-button:hover{
+  background-color: #f08f18;
+}
+.delete-button:hover {
+  background-color: #fb2d2d;
 }
 
 input[type="text"] {
@@ -82,7 +101,7 @@ input[type="text"] {
 }
 
 /* Media query for smaller displays */
-@media screen and (min-width: 501px) and (max-width: 1000px) {
+@media screen and (min-width: 501px) and (max-width: 1050px) {
   .todo-list {
     max-width: 90vw;
     max-height: 80vh;
@@ -92,4 +111,18 @@ input[type="text"] {
 
 .lists {
   overflow-y: scroll;
+}
+
+@media screen and (max-width: 350px) {
+  .todo-list {
+    max-width: 90vw;
+    max-height: 80vh;
+    width: 100vw; /* Set the width to 60% of viewport width for smaller displays */
+  }
+
+  .edit-button,
+  .delete-button {
+    font-size: 12px; /* Set a smaller font size for buttons */
+    padding: 4px 8px; /* Reduce button padding */
+  }
 }

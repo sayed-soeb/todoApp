@@ -124,7 +124,7 @@ function TodoList(todoss) {
         datasets: [
           {
             data: [completedCount, notCompletedCount],
-            backgroundColor: ['blue','green'],
+            backgroundColor: ['rgb(229, 97, 97)','#842e25'],
           },
         ],
       },
