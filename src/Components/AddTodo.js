@@ -8,7 +8,7 @@ function AddTodo() {
 
   const handleAddTodo = () => {
     axios
-      .post("/api/addtodo", { text: todoText })
+      .post(`http://localhost:5000/api/addtodo`, { text: todoText })
       .then((response) => {
         console.log(response.data);
         toast.success("Todo added successfully!"); // Display a success notification
