@@ -37,7 +37,28 @@ app.post('/api/addtodo',(req,res) => {
     newTodo.save()
     .then(todo => res.json(todo))
     .catch(err => console.log(err));
-})
+});
+
+//Update Todo
+app.put('/api/updatetodo/:id', (req,res) => {
+    Todo.findByIdAndUpdate(req.params.id, {text: req.body.text })
+    .then(() => res.json({ message: 'Todo updated successfully'}))
+    .catch(err => console.log(err));
+});
+
+//Get All Todos
+app.get('/api/gettodos', (req,res) => {
+    Todo.find()
+    .then(todos => res.json(todos))
+    .catch(err => console.log(err));
+});
+
+//Delete Todo
+app.delete('/api/deletetodo/:id', (req,res) => {
+    Todo.findByIdAndRemove(req.params.id)
+    .then(() => res.json({ message: 'Todo deleted successfully'}))
+    .catch(err => console.log(err));
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
