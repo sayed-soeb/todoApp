@@ -1,3 +1,6 @@
+## Live Demo
+
+Check out the live demo [here](https://todoapp-by-sayed.netlify.app/) to see the project in action.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
