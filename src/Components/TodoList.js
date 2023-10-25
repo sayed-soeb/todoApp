@@ -14,7 +14,7 @@ function TodoList(todoss) {
 
   const fetchTodos = () => {
     axios
-      .get("http://localhost:5000/api/gettodos")
+      .get("https://todoapp-quon.onrender.com/api/gettodos")
       .then((response) => {
         setTodos(response.data);
       })
@@ -25,7 +25,7 @@ function TodoList(todoss) {
 
   const fetchPie = () => {
     axios
-      .get("http://localhost:5000/api/gettodos")
+      .get("https://todoapp-quon.onrender.com/api/gettodos")
       .then((response) => {
         const completed = response.data.filter((todo) => todo.completed);
         setCompletedCount(completed.length);
@@ -49,7 +49,7 @@ function TodoList(todoss) {
   const handleUpdateTodo = (todo) => {
     const updatedStatus = !todo.completed;
     axios
-      .put(`http://localhost:5000/api/togglecompleted/${todo._id}`, {
+      .put(`https://todoapp-quon.onrender.com/api/togglecompleted/${todo._id}`, {
         completed: updatedStatus,
       })
       .then(() => {
@@ -73,7 +73,7 @@ function TodoList(todoss) {
     }
 
     axios
-      .put(`http://localhost:5000/api/updatetodo/${editTodo.id}`, {
+      .put(`https://todoapp-quon.onrender.com/api/updatetodo/${editTodo.id}`, {
         text: editTodo.text,
       })
       .then(() => {
@@ -89,7 +89,7 @@ function TodoList(todoss) {
 
   const handleDeleteTodo = (todo) => {
     axios
-      .delete(`http://localhost:5000/api/deletetodo/${todo._id}`)
+      .delete(`https://todoapp-quon.onrender.com/api/deletetodo/${todo._id}`)
       .then(() => {
         setTodos(todos.filter((item) => item._id !== todo._id));
         toast.success("Todo deleted successfully!");

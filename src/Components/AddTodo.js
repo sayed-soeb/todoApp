@@ -7,7 +7,7 @@ function AddTodo({ onAddTodo }) {
   const [todoText, setTodoText] = useState("");
 
   const handleAddTodo = () => {
-    axios.post(`http://localhost:5000/api/addtodo`, { text: todoText })
+    axios.post(`https://todoapp-quon.onrender.com/api/addtodo`, { text: todoText })
       .then((response) => {
         console.log(response.data);
         toast.success("Todo added successfully");
